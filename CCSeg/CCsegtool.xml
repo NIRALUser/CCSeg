@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+	<category>CCsegtool</category>
+	<title>Segmentation of Corpus Callosum</title>
+	<description>
+		Adaptation of the AVS-module, segment the corpus callosum on an Image
+	</description>
+	<contributor>Benjamin Yvernault</contributor>
+	
+	<parameters>
+		<boolean>
+			<name>gui</name>
+			<longflag>gui</longflag>
+			<description>If this option is used, you will use the graphical inteface, DEFAULT=false</description>
+			<label>gui</label>
+			<default>false</default>
+		</boolean>
+        </parameters>
+	
+	
+	<parameters>
+		<label>
+			CCsegtool input
+		</label>
+		<description>
+			Input data for CCsegtool, use only without gui
+		</description>
+		
+		<string>
+			<name>Image_filename</name>
+			<flag>I</flag>
+			<longflag>Image_filename</longflag>
+			<description>filename of the Input Image</description>
+			<label>Image_filename</label>
+		</string>
+		
+		<string>
+			<name>Mask_filename</name>
+			<flag>M</flag>
+			<longflag>Mask_filename</longflag>
+			<description>filename of the Mask Image</description>
+			<label>Mask_filename</label>
+		</string>
+		
+		<string>
+			<name>CCAtlasDirectory</name>
+			<flag>A</flag>
+			<longflag>CCAtlasDirectory</longflag>
+			<description>Path for the Corpus Callosum Atlas Directory where there is the value of the input vector. 1)first vector : Shape Model Mean, filename "Shape_mean.asc", 2)second vector : Shape Model Eigenvectors, filename "Shape_eigvecs.asc", 3)third vector : Shape Model Deformation Bound, filename "MedianWMValues.asc", 4)fourth vector : Profile Model Mean, filename "Profile_mean.asc", 4)fifth vector : Profile Model SigmaInv, filename "Profile_sigmainv.asc"
+			</description>
+			<label>CCAtlasDirectory</label>
+		</string>
+		
+		<string>
+			<name>OuputFolder</name>
+			<flag>O</flag>
+			<longflag>Path_output</longflag>
+			<description>Path for the output folder</description>
+			<label>OuputFolder</label>
+		</string>
+		
+		<string>
+			<name>nameofproject</name>
+			<flag>N</flag>
+			<longflag>nameofproject</longflag>
+			<description>name for the project, to name the output file</description>
+			<label>nameofproject</label>
+		</string>
+  </parameters>
+
+  
+  <parameters>
+	  <label>CCsegtool parameters</label>
+	  <description>Parameters for the segmentation</description>
+	  <integer>
+		  <name>segLabel</name>
+		  <flag>s</flag>
+		  <longflag>segLabel</longflag>
+		  <description>white matter label in the segmentation file is assumed to be '0', otherwise use this option
+		  </description>
+		  <label>segLabel</label>
+		  <default>0</default>
+	  </integer>
+	  
+	  <integer>
+		  <name>sliceDir</name>
+		  <longflag>sliceDir</longflag>
+		  <description>[0|1|2]    slicing direction (0=x,1=y,2=z), DEFAULT = 2 </description>
+		  <label>sliceDir</label>
+		  <default>2</default>
+		  <minimum>0</minimum>
+		  <maximum>2</maximum>
+	  </integer>
+	  
+	  <integer>
+		  <name>averageNum</name>
+		  <flag>a</flag>
+		  <longflag>averageNum</longflag>
+		  <description>number of slices for averaging the gray values, if 0, no averaging is done, DEFAULT 2
+		  </description>
+		  <label>averageNum</label>
+		  <default>2</default>
+	  </integer>
+	  
+	  <integer>
+		  <name>Number_Pts</name>
+		  <longflag>Number_Pts</longflag>
+		  <description>number of points for drawing, DEFAULT 256</description>
+		  <label>Number_Pts</label>
+		  <default>256</default>
+	  </integer>
+	  
+	  <boolean>
+		  <name>vesselRemoveOn</name>
+		  <longflag>Vessel</longflag>
+		  <description>Remove vessels as initial step</description>
+		  <label>Vessel</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>permute_x_y</name>
+		  <longflag>permutexy</longflag>
+		  <description>Permute axe X and Y, DEFAULT=off</description>
+		  <label>permutexy</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>reflectXOn</name>
+		  <longflag>ReflectX</longflag>
+		  <description>Slice Image is reflected at y-axis (flip horizontal), DEFAULT=off</description>
+		  <label>ReflectX</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>reflectYOn</name>
+		  <longflag>ReflectY</longflag>
+		  <description>Slice Image is reflected at x-axis (flip vertical),  DEFAULT=off</description>
+		  <label>ReflectY</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>openOn</name>
+		  <longflag>open</longflag>
+		  <description>Apply open operation instead of closing in preprocessing of segfile</description>
+		  <label>open</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>doubleOn</name>
+		  <longflag>double</longflag>
+		  <description>Double the size of the image for more precise segmentation</description>
+		  <label>double</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>Unconstrained</name>
+		  <longflag>Unconstrained</longflag>
+		  <description> add an unconstrained third step, only run the PCA shape space constrained segmentation</description>
+		  <label>Unconstrained</label>
+		  <default>true</default>
+	  </boolean>
+	  
+	  <string>
+		  <name>WMintensity</name>
+		  <flag>w</flag>
+		  <longflag>WMintensity</longflag>
+		  <description>White Mater intensity : 3 value for the number of three steps. E.G 90,50,0</description>
+		  <label>WMintensity</label>
+		  <default>default,default,default</default>
+	  </string>
+	  
+	  <boolean>
+		  <name>FSXForm</name>
+		  <longflag>FSXForm</longflag>
+		  <description>Fix Similarity XForm or do_similarity</description>
+		  <label>FSXForm</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <float>
+		  <name>PSDistance</name>
+		  <longflag>PSDistance</longflag>
+		  <description>Profile Sampling Distance</description>
+		  <label>PSDistance</label>
+		  <default>0.5</default>
+		  <minimum>0.0001</minimum>
+		  <maximum>1.0</maximum>
+	  </float>
+	  
+	  <string>
+		  <name>MPSDisplacement</name>
+		  <flag>d</flag>
+		  <longflag>MPSDisplacement</longflag>
+		  <description>Max Per-Step Displacement : 3 value for the number of three steps. E.G 10,3,2</description>
+		  <label>MPSDisplacement</label>
+		  <default>10,3,2</default>
+	  </string>
+	  <string>
+		  <name>Number_iteration</name>
+		  <flag>n</flag>
+		  <longflag>Number_iteration</longflag>
+		  <description>Number of iteration : 3 value for the number of three steps. E.G 50,5,3</description>
+		  <label>Number_iteration</label>
+		  <default>50,5,3</default>
+	  </string>
+	  
+	  <integer>
+		  <name>Lambdamax</name>
+		  <flag>l</flag>
+		  <longflag>Lambdamax</longflag>
+		  <description>Lamba max factor for allowing deformations within PCA shape space</description>
+		  <label>Lambdamax</label>
+		  <default>100</default>
+	  </integer>
+	  
+	  <string>
+		  <name>Coefofoptim</name>
+		  <flag>c</flag>
+		  <longflag>Coefofoptim</longflag>
+		  <description>coefficient to optimise the process and stop it when the segmentation is good.</description>
+		  <label>Coefofoptim</label>
+		  <default>0.25,0.1,0.05</default>
+	  </string>
+	  
+	  <string>
+		  <name>MidPlaneSliceNumber</name>
+		  <longflag>MidPlaneSliceNumber</longflag>
+		  <description>number of the slice used for the segmentation in the direction of SliceDir(0 to max), DEFAULT = middle.</description>
+		  <label>MidPlaneSliceNumber</label>
+		  <default>default</default>
+	  </string>
+	  
+	  <boolean>
+		  <name>debug</name>
+		  <longflag>debug</longflag>
+		  <description>Print debuging message and save the coefficient for each iteration</description>
+		  <label>debug</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>ComputeProbaModel</name>
+		  <longflag>ComputeProbaModel</longflag>
+		  <description>Compute soft subdivision areas of 2D curves given probability maps </description>
+		  <label>ComputeProbaModel</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <boolean>
+		  <name>interpolationlinear</name>
+		  <longflag>interpolationlinear</longflag>
+		  <description>Use an linear interpolation when you double the size of the image </description>
+		  <label>interpolationlinear</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <integer>
+		  <name>loop</name>
+		  <longflag>loop</longflag>
+		  <description>rerun the segmentation with the last segmentation loop times, DEFAULT=0 </description>
+		  <label>loop</label>
+		  <default>0</default>
+	  </integer>
+	  
+	  <float>
+		  <name>scalefactor</name>
+		  <longflag>scalefactor</longflag>
+		  <description>during the preprocessing, scale is multiplied by this value. DEFAULT=1.35</description>
+		  <label>scalefactor</label>
+		  <default>1.35</default>
+	  </float>
+	  
+	  <boolean>
+		  <name>othercompo</name>
+		  <longflag>othercompo</longflag>
+		  <description>during the preprocessing, add this flag to use the other component.</description>
+		  <label>othercompo</label>
+		  <default>false</default>
+	  </boolean>
+	  
+	  <integer>
+		  <name>addangle</name>
+		  <longflag>addangle</longflag>
+		  <description>during the preprocessing, add this value to the rotation, 0 for 0 degrees, 1 for 90, 2 for 180, 3 for 270. DEFAULT=0</description>
+		  <label>addangle</label>
+		  <default>0</default>
+	  </integer>
+  </parameters>
+</executable>
