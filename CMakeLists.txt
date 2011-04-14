@@ -28,9 +28,9 @@ ENDIF(QT_USE_FILE)
 
 OPTION(COMPILE_CCSeg "Compile CCSeg." ON)
 IF(COMPILE_CCSeg)
-  PACKAGE_NEEDS_SlicerExecutionModel("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
   PACKAGE_NEEDS_ITK("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
   PACKAGE_NEEDS_VTKWITHQT("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
+  PACKAGE_NEEDS_SlicerExecutionModel("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
   set(proj CCSeg)
   ExternalProject_Add(${proj}
     DOWNLOAD_COMMAND ""
