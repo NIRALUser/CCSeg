@@ -40,7 +40,7 @@ CCsegtoolguiwindow::CCsegtoolguiwindow(float scalefactor, bool Debug, QWidget * 
 	GOFmeantitle->setFont(QFont("Courrier", 12,4));
 	Areatitle->setFont(QFont("Courrier", 12,4));
 	IsolineLabel->setFont(QFont("Courrier", 12,4));
-	visuflip->setFont(QFont("Courrier", 12,4));
+	visuflip->setFont(QFont("Courrier", 11,4));
 	
 	/* Initialization of the parameters */
 	m_OldInputImage = "";
