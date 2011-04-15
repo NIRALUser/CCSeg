@@ -9,6 +9,13 @@ CCsegtoolguiwindow::CCsegtoolguiwindow(float scalefactor, bool Debug, QWidget * 
 	
 	this->setMouseTracking(true);
 	
+	/* set the main layout */
+	/* ScrollArea */
+	QScrollArea *const scroll(new QScrollArea);
+	centralwidget->setLayout(GLayoutPrincipal);
+	scroll->setWidget(centralwidget);
+	setCentralWidget(scroll);
+	
 	/* set the Debug */
 	m_Debug = Debug;
 	if(Debug)
@@ -33,7 +40,7 @@ CCsegtoolguiwindow::CCsegtoolguiwindow(float scalefactor, bool Debug, QWidget * 
 	GOFmeantitle->setFont(QFont("Courrier", 12,4));
 	Areatitle->setFont(QFont("Courrier", 12,4));
 	IsolineLabel->setFont(QFont("Courrier", 12,4));
-	visuflip->setFont(QFont("Courrier", 12,4));
+	visuflip->setFont(QFont("Courrier", 11,4));
 	
 	/* Initialization of the parameters */
 	m_OldInputImage = "";
@@ -212,15 +219,25 @@ void CCsegtoolguiwindow::Preview(int resetVisu)
 					m_scrollArea->setFixedSize((m_viewimage->Getsize()).width(),
 							(m_viewimage->Getsize()).height());
 					m_scrollArea->setWidgetResizable(true);
-					if((m_viewimage->Getsize()).width()>(m_viewimage->Getsize()).height())
-						m_scrollArea->move(40,145);
-					else
-						m_scrollArea->move(110,85);
-					m_scrollArea->show();
-					m_Scrollexist = true;
-					
 					/* Set the widget for the scrollArea */
-					m_scrollArea->setWidget(m_viewimage);
+					if((m_viewimage->Getsize()).width()>(m_viewimage->Getsize()).height())
+					{
+						m_scrollArea->setFixedSize((m_viewimage->Getsize()).width(),
+								(m_viewimage->Getsize()).height());
+						/* Set on the Imageview */
+						m_scrollArea->setWidget(m_viewimage);
+						m_scrollArea->move(40,145);
+					}
+					else
+					{
+						m_scrollArea->setFixedSize((m_viewimage->Getsize()).width(),
+								(m_viewimage->Getsize()).height());
+						/* Set on the Imageview */
+						m_scrollArea->setWidget(m_viewimage);
+						m_scrollArea->move(110,85);
+					}
+					GLayoutPrincipal->addWidget(m_scrollArea,2,0);
+					m_Scrollexist = true;
 				}
 				else if(resetVisu==0)
 				{
@@ -340,7 +357,7 @@ void CCsegtoolguiwindow::ComputeProbabilityModel()
 	if(m_Debug)
 		std::cout<<"-----COMPUTE PROBABILITY MODEL-----"<<std::endl;
 	/* Call compute */
-	if(!m_runcalled)
+	if(m_runcalled)
 	{
 		// Create the Probacurve and set the parameters
 		CCcurveProba *Probacurve;
@@ -624,22 +641,8 @@ void CCsegtoolguiwindow::browserImage()
 {
 	QString filename,type;
 	std::string image;
-	image = inputImage->text().toStdString();
-	if(image.compare("")!=0)
-	{
-		QString directoryPath = (image.substr(0, image.find_last_of("/"))).c_str();
-		if(m_Debug)
-			std::cout<<"directory path : "<<(directoryPath.toStdString()).c_str()<<std::endl;
-		filename = QFileDialog::getOpenFileName(this, "Open File input image", directoryPath, 
-				"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type,
-				QFileDialog::HideNameFilterDetails);
-	}
-	else
-	{
-		filename = QFileDialog::getOpenFileName(this, "Open File input image", "/", 
-				"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type,
-				QFileDialog::HideNameFilterDetails);
-	}
+	filename = QFileDialog::getOpenFileName(this, "Open File input image", "/", 
+			"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type);
 	
 	if(m_Debug)
 		std::cout<<"Filename : "<< (filename.toStdString()).c_str() <<std::endl;
@@ -670,14 +673,12 @@ void CCsegtoolguiwindow::browserMask()
 		if(m_Debug)
 			std::cout<<"directory path : "<<(directoryPath.toStdString()).c_str()<<std::endl;
 		filename = QFileDialog::getOpenFileName(this, "Open File input image", directoryPath, 
-				"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type,
-				QFileDialog::HideNameFilterDetails);
+				"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type);
 	}
 	else
 	{
 		filename = QFileDialog::getOpenFileName(this, "Open File binary mask","/",
-			"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type,
-			QFileDialog::HideNameFilterDetails);
+			"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type);
 	}
 	
 	if(m_Debug)

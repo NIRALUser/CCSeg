@@ -1,28 +1,23 @@
-cmake_minimum_required(VERSION 2.8)
-
 Project(CCSeg)
+set(LOCAL_PROJECT_NAME CCSeg)
 
-FIND_PACKAGE(ITK REQUIRED)
-IF (ITK_FOUND)
-   INCLUDE(${USE_ITK_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR, "ITK not found. Please set ITK_DIR.")
-ENDIF (ITK_FOUND)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-FIND_PACKAGE(VTK REQUIRED)
-IF (VTK_FOUND)
-  INCLUDE(${VTK_USE_FILE})
-ELSE(VTK_FOUND)
-   MESSAGE(FATAL_ERROR, "VTK not found. Please set VTK_DIR.")
-ENDIF (VTK_FOUND)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR} CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+set(BRAINS_CMAKE_HELPER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
+include(${BRAINS_CMAKE_HELPER_DIR}/CMakeBuildMacros.cmake)
+include(${BRAINS_CMAKE_HELPER_DIR}/PreventInSourceBuilds.cmake)
+include(${BRAINS_CMAKE_HELPER_DIR}/CMakeCommonExternalDefinitions.cmake)
 
-FIND_PACKAGE(GenerateCLP REQUIRED)
-IF (GenerateCLP_FOUND)
-  INCLUDE(${GenerateCLP_USE_FILE})
-ELSE(GenerateCLP_FOUND)
-   MESSAGE(FATAL_ERROR, "GenerateCLP not found. Please set GenerateCLP_DIR.")
-ENDIF (GenerateCLP_FOUND)
+#External Projects
+include(ExternalProject)
+if(CMAKE_EXTRA_GENERATOR)
+  set(gen "${CMAKE_EXTRA_GENERATOR} - ${CMAKE_GENERATOR}")
+else()
+  set(gen "${CMAKE_GENERATOR}")
+endif()
 
+#QT package
 FIND_PACKAGE(Qt REQUIRED)
 IF(QT_USE_FILE)
   INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR})
@@ -31,22 +26,25 @@ ELSE(QT_USE_FILE)
    MESSAGE(FATAL_ERROR, "QT not found. Please set QT_DIR.")
 ENDIF(QT_USE_FILE)
 
-INCLUDE_DIRECTORIES(
-  ${QT_INCLUDE_DIR}
-  ${CCSeg_BINARY_DIR}
-  ${CCSeg_SOURCE_DIR}
-)
-
-QT4_WRAP_CPP(MOC_FILES CCsegtoolguiwindow.h)
-QT4_WRAP_UI(UI_FILES CCsegtoolguiwindow.ui)
-
-SET(CCSeg_source CCsegtool.cxx CCsegtoolguiwindow.cxx Imageview.cxx Globalfunc.cxx CCsegtool_computation.cxx CCsegtool_parameters.cxx CCsegtool_initialization.cxx fourier_funcs.cxx VesselRemover.cxx CCcurveProba.cxx ${MOC_FILES} ${UI_FILES})
-
-GENERATECLP(CCsegtool.cxx CCsegtool.xml)
-add_executable( CCSeg ${CCSeg_source})
-
-TARGET_LINK_LIBRARIES(CCSeg
-  ${ITK_LIBRARIES}
-  vtkHybrid
-  ${QT_LIBRARIES}
-)
+OPTION(COMPILE_CCSeg "Compile CCSeg." ON)
+IF(COMPILE_CCSeg)
+  PACKAGE_NEEDS_ITK("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
+  PACKAGE_NEEDS_VTKWITHQT("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
+  PACKAGE_NEEDS_SlicerExecutionModel("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
+  set(proj CCSeg)
+  ExternalProject_Add(${proj}
+    DOWNLOAD_COMMAND ""
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${proj}
+    BINARY_DIR ${proj}-build
+    DEPENDS ${ITK_DEPEND} ${VTK_DEPEND} ${SlicerExecutionModel_DEPEND}
+    CMAKE_GENERATOR ${gen}
+    CMAKE_ARGS
+      ${LOCAL_CMAKE_BUILD_OPTIONS}
+      -DGenerateCLP_DIR:PATH=${GenerateCLP_DIR}
+      -DITK_DIR:PATH=${ITK_DIR}
+      -DVTK_DIR:PATH=${VTK_DIR}
+    #INSTALL_COMMAND ""
+    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  )
+  FORCE_BUILD_CHECK(${proj})
+ENDIF(COMPILE_CCSeg)
