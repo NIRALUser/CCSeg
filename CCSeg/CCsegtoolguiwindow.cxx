@@ -357,7 +357,7 @@ void CCsegtoolguiwindow::ComputeProbabilityModel()
 	if(m_Debug)
 		std::cout<<"-----COMPUTE PROBABILITY MODEL-----"<<std::endl;
 	/* Call compute */
-	if(!m_runcalled)
+	if(m_runcalled)
 	{
 		// Create the Probacurve and set the parameters
 		CCcurveProba *Probacurve;
