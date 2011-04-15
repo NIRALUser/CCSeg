@@ -411,14 +411,14 @@
             <item row="3" column="0">
              <widget class="QLineEdit" name="CCAtlasDirectorybox">
               <property name="text">
-               <string>/tools/CCsegmenter_autism/Model</string>
+               <string/>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="CCatlasdirectorylabel">
               <property name="text">
-               <string>Corpus Collosum Atlas directory</string>
+               <string>Corpus Callosum Atlas directory</string>
               </property>
              </widget>
             </item>
