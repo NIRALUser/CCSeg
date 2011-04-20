@@ -857,7 +857,7 @@ int CCsegtool_initialization::compute_parameters(void)
 	ExtractImageType::RegionType imageRegion = maskedImage->GetBufferedRegion();
 	double numVoxels = 0;
 	double sumIntensities = 0;
-	HistogramType::Iterator histoIter;
+	HistogramType::Iterator histoIter(histogram);
 	HistogramType::IndexType index;
 	
 	for (histoIter = histogram->Begin() ; histoIter != histogram->End() ; ++histoIter) 
