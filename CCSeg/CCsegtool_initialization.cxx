@@ -771,13 +771,20 @@ int CCsegtool_initialization::compute_parameters(void)
 	MomentsCalcType::MatrixType principalAxes = momentCalc->GetPrincipalAxes();
 	//angle is angle between x-axis and 2nd principal axes (or y-axis and 1st)
 	// principal axes are normalized
+	// With a flip, change the rotation value by 2*Pi - init value
 	double anglePrincAxes;
 	if(m_reflectXOn || m_reflectYOn || m_permute_x_y)
 	{
 		if(m_reflectXOn)
+		{
 			anglePrincAxes = acos (principalAxes[0][1]);
+			anglePrincAxes = 2*3.14159265 - anglePrincAxes;
+		}
 		if(m_reflectYOn)
+		{
 			anglePrincAxes = acos (principalAxes[0][0]);
+			anglePrincAxes = 2*3.14159265 - anglePrincAxes;
+		}
 		if(m_permute_x_y)
 			anglePrincAxes = -acos (principalAxes[0][0]);
 	}
@@ -857,7 +864,7 @@ int CCsegtool_initialization::compute_parameters(void)
 	ExtractImageType::RegionType imageRegion = maskedImage->GetBufferedRegion();
 	double numVoxels = 0;
 	double sumIntensities = 0;
-	HistogramType::Iterator histoIter;
+	HistogramType::Iterator histoIter(histogram);
 	HistogramType::IndexType index;
 	
 	for (histoIter = histogram->Begin() ; histoIter != histogram->End() ; ++histoIter) 
