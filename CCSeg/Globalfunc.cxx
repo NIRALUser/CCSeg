@@ -109,7 +109,7 @@ int initialize( std::string Image_filename, std::string Seg_filename, std::strin
 	Number_iteration1= 50;
 	Number_iteration2= 5;
 	Number_iteration3= 3;
-	if(Number_iteration.compare("50,5,3")!=0)
+	if(Number_iteration.compare("50,15,3")!=0)
 	{
 		Number_iteration1=readstringinputi(Number_iteration, 1, 3);
 		Number_iteration2=readstringinputi(Number_iteration, 2, 3);
@@ -270,7 +270,7 @@ void compute( std::string Path_output, std::string nameofproject, int number_pts
 	Number_iteration1= 50;
 	Number_iteration2= 5;
 	Number_iteration3= 3;
-	if(Number_iteration.compare("50,5,3")!=0)
+	if(Number_iteration.compare("50,15,3")!=0)
 	{
 		Number_iteration1=readstringinputi(Number_iteration, 1, 3);
 		Number_iteration2=readstringinputi(Number_iteration, 2, 3);

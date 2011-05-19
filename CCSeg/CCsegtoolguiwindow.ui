@@ -928,7 +928,7 @@
              <set>Qt::ImhNone</set>
             </property>
             <property name="text">
-             <string>50,5,3</string>
+             <string>50,15,3</string>
             </property>
            </widget>
           </item>
