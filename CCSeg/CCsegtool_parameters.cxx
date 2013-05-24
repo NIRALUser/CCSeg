@@ -534,7 +534,7 @@ ExtractImageConstPointer CCsegtool_parameters::GetImage()
 }
 /*Input vector*/
 //Shape Model Mean
-vector<float> CCsegtool_parameters::GetSMMean()
+std::vector<float> CCsegtool_parameters::GetSMMean()
 {
 	return m_SMMean;
 }
@@ -550,7 +550,7 @@ float CCsegtool_parameters::GetSMMeanval(int x,int y)
 }
 
 //Shape Model Eigenvectors
-vector<float> CCsegtool_parameters::GetEigenvectors()
+std::vector<float> CCsegtool_parameters::GetEigenvectors()
 {
 	return m_Eigenvectors;
 }
@@ -566,14 +566,14 @@ float CCsegtool_parameters::GetEigenvectorsval(int x,int y,int z)
 }
 
 //Shape Model Deformation Bounds
-vector<float> CCsegtool_parameters::GetBound()
+std::vector<float> CCsegtool_parameters::GetBound()
 {
 	return m_Bound;
 }
 
 
 //Profile Model Mean
-vector<float> CCsegtool_parameters::GetPMMean()
+std::vector<float> CCsegtool_parameters::GetPMMean()
 {
 	return m_PMMean;
 }
@@ -590,7 +590,7 @@ float CCsegtool_parameters::GetPMMeanval(int x,int y)
 
 
 //Profile Model SigmaInv
-vector<float> CCsegtool_parameters::GetSigmaInv()
+std::vector<float> CCsegtool_parameters::GetSigmaInv()
 {
 	return m_SigmaInv;
 }
@@ -613,55 +613,55 @@ float CCsegtool_parameters::GetSigmaInvval(int x,int y, int z)
 
 /*Output vector*/
 //Segmented Shape Coefs
-void CCsegtool_parameters::SetSSCoefs(vector<float> _SSCoefs)
+void CCsegtool_parameters::SetSSCoefs(std::vector<float> _SSCoefs)
 {
 	m_SSCoefs.clear();
 	for(unsigned int i=0;i<_SSCoefs.size();i++)
 		m_SSCoefs.push_back(_SSCoefs[i]);
 }
-vector<float> CCsegtool_parameters::GetSSCoefs()
+std::vector<float> CCsegtool_parameters::GetSSCoefs()
 {
 	return m_SSCoefs;
 }
 
 //Image Profiles
-void CCsegtool_parameters::SetIProfiles(vector<float> _IProfiles)
+void CCsegtool_parameters::SetIProfiles(std::vector<float> _IProfiles)
 {
 	m_IProfiles.clear();
 	for(unsigned int i=0;i<_IProfiles.size();i++)
 		m_IProfiles.push_back(_IProfiles[i]);
 }
-vector<float> CCsegtool_parameters::GetIProfiles()
+std::vector<float> CCsegtool_parameters::GetIProfiles()
 {
 	return m_IProfiles;
 }
 
 //Goodness of Fit
-void CCsegtool_parameters::SetGoodnessoffit(vector<double> _Goodnessoffit)
+void CCsegtool_parameters::SetGoodnessoffit(std::vector<double> _Goodnessoffit)
 {
 	m_Goodnessoffit.clear();
 	for(unsigned int i=0;i<_Goodnessoffit.size();i++)
 		m_Goodnessoffit.push_back(_Goodnessoffit[i]);
 }
-vector<double> CCsegtool_parameters::GetGoodnessoffit()
+std::vector<double> CCsegtool_parameters::GetGoodnessoffit()
 {
 	return m_Goodnessoffit;
 }
 
 //Per-Profile Shifts
-void CCsegtool_parameters::SetPPShifts(vector<float> _PPShifts)
+void CCsegtool_parameters::SetPPShifts(std::vector<float> _PPShifts)
 {
 	m_PPShifts.clear();
 	for(unsigned int i=0;i<_PPShifts.size();i++)
 		m_PPShifts.push_back(_PPShifts[i]);
 }
-vector<float> CCsegtool_parameters::GetPPShifts()
+std::vector<float> CCsegtool_parameters::GetPPShifts()
 {
 	return m_PPShifts;
 }
 
 //Eigenloadings
-void CCsegtool_parameters::Seteigloads(vector<float> _eigloads)
+void CCsegtool_parameters::Seteigloads(std::vector<float> _eigloads)
 {
 	m_eigloads.clear();
 	for(unsigned int i=0;i<_eigloads.size();i++)
@@ -671,7 +671,7 @@ void CCsegtool_parameters::Seteigloadsval(int i, float value)
 {
 	m_eigloads[i]=value;
 }
-vector<float> CCsegtool_parameters::Geteigloads()
+std::vector<float> CCsegtool_parameters::Geteigloads()
 {
 	return m_eigloads;
 }

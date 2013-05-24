@@ -12,7 +12,7 @@ class CCsegtool_computation
 		CCsegtool_computation(CCsegtool_parameters * parameters, std::string nameofproject, std::string path_output,
 				      bool Debug=false,double A=0.0, double r=0.0);
 		/* set the repulsive points */
-		void setRepulPoints(vector<double> *RepulPoints);
+		void setRepulPoints(std::vector<double> *RepulPoints);
 		
 		/* methods */
 		/* Main method : execution */
@@ -26,7 +26,7 @@ class CCsegtool_computation
 		/* calcul of the shift */
 		int profile_shift( float* imgprof, double* GOFvalue, int proflen, float grey_scaling,int pointID);
 		double goodness_of_fit( float* profile, int proflen,int pointID);
-		vector<float>::iterator getiterator(vector<float> vect,int i);
+		std::vector<float>::iterator getiterator(std::vector<float> vect,int i);
 		double computeRepulsionExponentialPenalty(int pointID, double shift);
 		double exponential(double X, double Y, int pointRepulsivID);
 		void calcshift();
@@ -89,8 +89,8 @@ class CCsegtool_computation
 		bool         m_firstTime;
 		
 		/* local data structures */
-		vector<float>  m_dp;
-		vector<double> m_RepulPoints;
+		std::vector<float>  m_dp;
+		std::vector<double> m_RepulPoints;
 		Point4* m_coefs;
 		Point2* m_sample_pts;
 		Point2* m_old_sample_pts;

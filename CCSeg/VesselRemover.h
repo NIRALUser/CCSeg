@@ -7,7 +7,6 @@
 #define _VESSEL_REMOVAL_H_
 
 #include <itkImage.h>
-#include <itkOrientedImage.h>
 #include <itkMinimumMaximumImageCalculator.h>
 #include <itkHistogram.h> 
 #include <itkMaskImageFilter.h>
@@ -45,7 +44,7 @@ class ITK_EXPORT  VesselRemover : public itk::Object
 		typedef   short                        PixelType;
 		
 		/** Type of the input image */
-		typedef   itk::OrientedImage<PixelType,ImageDimension>    ImageType;
+		typedef   itk::Image<PixelType,ImageDimension>    ImageType;
 		typedef   ImageType::Pointer  ImagePointer;
 		
 		/** Const Pointer type for the image. */

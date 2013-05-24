@@ -443,7 +443,7 @@ void compute( std::string Path_output, std::string nameofproject, int number_pts
 int readstringWMI(std::string str, int position, int initWMvalue)
 {
 	std::string str2,buf1,buf2;
-	int WMvalue;
+	int WMvalue = 0;
 	size_t found;
 	
 	/* initialization */

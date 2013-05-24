@@ -52,7 +52,7 @@ void format_coefs(Point4* coefs,	/* input Fourier contour */
 		  CCsegtool_parameters *parameters)	/* output data field of AVS field */
 {
 	int i, j;
-	vector<float> out_fld;
+	std::vector<float> out_fld;
 	out_fld.push_back(centroid[0]);
 	out_fld.push_back(centroid[1]);
 	out_fld.push_back(0);

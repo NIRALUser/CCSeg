@@ -1,16 +1,17 @@
 #ifndef _CCSEGTOOL_INITIALIZATION_H_
 #define _CCSEGTOOL_INITIALIZATION_H_
 
+
 #include "VesselRemover.h"
-#include "argio.h"
-#include <iostream.h>
+#include <iostream>
 #include <time.h>
 #include <math.h>
-#include <fstream.h>
-#include <ostream.h>
+#include <fstream>
+#include <ostream>
 
 //ITK librairies for Image
 #include <itkObject.h>
+#include <itkImage.h>
 #include <itkObjectFactory.h>
 #include <itkImageFileReader.h> 
 #include <itkImageFileWriter.h>
@@ -51,8 +52,8 @@ enum { ImageEDimension = 2 };
 
 /** Dimension 3 **/
 /** Type of the input image */
-typedef itk::OrientedImage<InputPixelType,ImageIDimension>     InputImageType;
-typedef itk::OrientedImage<BinaryPixelType,ImageIDimension>    BinaryImageType;
+typedef itk::Image<InputPixelType,ImageIDimension>     InputImageType;
+typedef itk::Image<BinaryPixelType,ImageIDimension>    BinaryImageType;
 typedef InputImageType::Pointer                                ImagePointer;
 typedef InputImageType::RegionType                             ImageRegionType;
 typedef InputImageType::SpacingType                            SpacingType;
@@ -63,14 +64,14 @@ typedef itk::Index<ImageIDimension>                            InputImageIndex;
 
 /** Dimension 2 **/
 /** Type of the internal image */
-typedef itk::OrientedImage<InputPixelType,ImageEDimension>          ExtractImageType;
+typedef itk::Image<InputPixelType,ImageEDimension>          ExtractImageType;
 /** Const Pointer type for the image. */
 typedef ExtractImageType::ConstPointer                              ExtractImageConstPointer;
 /** Type of the internal image */
-typedef itk::OrientedImage<BinaryPixelType,ImageEDimension>         ExtractBinaryImageType;
+typedef itk::Image<BinaryPixelType,ImageEDimension>         ExtractBinaryImageType;
 typedef ExtractBinaryImageType::ConstPointer                        ExtractBinaryImageConstPointer;
 /** Type of the output image */
-typedef itk::OrientedImage<OutputPixelType,ImageEDimension>         OutputImageType;
+typedef itk::Image<OutputPixelType,ImageEDimension>         OutputImageType;
 /** Use in  compute_parameters **/
 typedef itk::Statistics::Histogram<double>                  HistogramType;
 typedef ExtractImageType::RegionType                        ExtractImageRegionType;
@@ -158,7 +159,7 @@ class CCsegtool_initialization
 
 	private:
 		/** Use in compute_parameters **/
-		typedef   itk::OrientedImage<short,ImageEDimension>     CCLOutputImageType;
+		typedef   itk::Image<short,ImageEDimension>     CCLOutputImageType;
 		typedef   itk::ConnectedComponentImageFilter< ExtractBinaryImageType, CCLOutputImageType> CCLFilterType;
 		typedef   itk::RelabelComponentImageFilter<CCLOutputImageType, CCLOutputImageType> RelabelFilterType;
 		typedef   itk::BinaryThresholdImageFilter< CCLOutputImageType,  ExtractBinaryImageType> threshCCLFilterType;
@@ -186,6 +187,7 @@ class CCsegtool_initialization
 		BinaryCast2d3dFilterType::Pointer  m_bincast3DFilter;
 		threshCCLFilterType::Pointer       m_thresh1Filter;
 		threshCCLFilterType::Pointer       m_thresh2Filter;
+		threshCCLFilterType::Pointer       m_thresh3Filter;
 		MaskImageType::Pointer             m_maskFilter;
 		CastPNGFilterType::Pointer         m_uncharoutput;
 		

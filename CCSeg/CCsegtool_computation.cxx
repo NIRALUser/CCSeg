@@ -86,7 +86,7 @@ CCsegtool_computation::CCsegtool_computation(CCsegtool_parameters * parameters, 
 	
 }
 
-void CCsegtool_computation::setRepulPoints(vector<double> *RepulPoints)
+void CCsegtool_computation::setRepulPoints(std::vector<double> *RepulPoints)
 {
 	if(RepulPoints!=NULL)
 		m_RepulPoints.clear();
@@ -216,7 +216,7 @@ float CCsegtool_computation::execution(CCsegtool_parameters * parameters, int st
  *****************************************************************************/
 void CCsegtool_computation::get_profiles()
 {
-	vector<float> profiles;
+  std::vector<float> profiles;
 	Point2 shade_pt;
 	for (unsigned int i=0; i<m_num_samples; i++) {
 		for (unsigned int j = 0; j<m_ext_proflen; j++) {
@@ -337,9 +337,9 @@ int CCsegtool_computation::profile_shift(float *imgprof,	/* input test profile *
 	return bestshift;
 }
 
-vector<float>::iterator CCsegtool_computation::getiterator(vector<float> vect, int i)
+std::vector<float>::iterator CCsegtool_computation::getiterator(std::vector<float> vect, int i)
 {
-	vector<float>::iterator it;
+	std::vector<float>::iterator it;
 	int counter=0;
 	for(it=vect.begin();it<vect.end();it++)
 	{
@@ -391,8 +391,8 @@ void CCsegtool_computation::calcshift()
 {
 	int shift;
 	double value;
-	vector<float>  prof_shifts;
-	vector<double> match;
+	std::vector<float>  prof_shifts;
+	std::vector<double> match;
 	/* Keep the old value */
 	for (unsigned int i=0; i<m_num_samples; i++) {
 		m_old_sample_pts[i][0]=m_sample_pts[i][0];
@@ -437,7 +437,7 @@ void CCsegtool_computation::addmean(Point4* coefs)
  *****************************************************************************/
 void CCsegtool_computation::proj_eigvec(Point4* _coefs)
 {
-	vector<float> p;
+	std::vector<float> p;
 	float buf[m_num_modes];
 	for (unsigned int i=0; i<m_num_modes; i++) {
 		buf[i]=0.;

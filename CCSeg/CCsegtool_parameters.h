@@ -9,9 +9,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream.h>
-#include <fstream.h>
-#include <vector.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
 
 //VTK librairies 
 #include <vtkSmartPointer.h>
@@ -85,27 +85,27 @@ class CCsegtool_parameters
 		//Methods for Input Port
 		void SetImage(ExtractImageConstPointer _Image);
 		ExtractImageConstPointer GetImage();
-		vector<float> GetSMMean();
+		std::vector<float> GetSMMean();
 		float GetSMMeanval(int x,int y);
-		vector<float> GetEigenvectors();
+		std::vector<float> GetEigenvectors();
 		float GetEigenvectorsval(int x,int y, int z);
-		vector<float> GetBound();
-		vector<float> GetPMMean();
+		std::vector<float> GetBound();
+		std::vector<float> GetPMMean();
 		float GetPMMeanval(int x,int y);
-		vector<float> GetSigmaInv();
+		std::vector<float> GetSigmaInv();
 		float GetSigmaInvval(int x,int y, int z);
 		//Methods for Output Port
-		void SetSSCoefs(vector<float> _SSCoefs);
-		vector<float> GetSSCoefs();
-		void SetIProfiles(vector<float> _IProfiles);
-		vector<float> GetIProfiles();
-		void SetGoodnessoffit(vector<double> _Goodnessoffit);
-		vector<double> GetGoodnessoffit();
-		void SetPPShifts(vector<float> _PPShifts);
-		vector<float> GetPPShifts();
-		void Seteigloads(vector<float> _eigloads);
+		void SetSSCoefs(std::vector<float> _SSCoefs);
+		std::vector<float> GetSSCoefs();
+		void SetIProfiles(std::vector<float> _IProfiles);
+		std::vector<float> GetIProfiles();
+		void SetGoodnessoffit(std::vector<double> _Goodnessoffit);
+		std::vector<double> GetGoodnessoffit();
+		void SetPPShifts(std::vector<float> _PPShifts);
+		std::vector<float> GetPPShifts();
+		void Seteigloads(std::vector<float> _eigloads);
 		void Seteigloadsval(int i, float value);
-		vector<float> Geteigloads();
+		std::vector<float> Geteigloads();
 		/*size in/out vector method*/
 		int GetSMMeansize(int number);
 		int GetEigenvectorssize(int number);
@@ -138,19 +138,19 @@ class CCsegtool_parameters
 		ExtractImageConstPointer         m_Image;
 		
 		/* Input Port Specifications */
-		vector<float> m_SMMean;
-		vector<float> m_Eigenvectors;
-		vector<float> m_Bound;
-		vector<float> m_PMMean;
-		vector<float> m_SigmaInv;
+		std::vector<float> m_SMMean;
+		std::vector<float> m_Eigenvectors;
+		std::vector<float> m_Bound;
+		std::vector<float> m_PMMean;
+		std::vector<float> m_SigmaInv;
 		Point4 *      m_coefs;
 	
 		/* Output Port Specifications */
-		vector<float>  m_SSCoefs;
-		vector<float>  m_IProfiles;
-		vector<double> m_Goodnessoffit;
-		vector<float>  m_PPShifts;
-		vector<float>  m_eigloads;
+		std::vector<float>  m_SSCoefs;
+		std::vector<float>  m_IProfiles;
+		std::vector<double> m_Goodnessoffit;
+		std::vector<float>  m_PPShifts;
+		std::vector<float>  m_eigloads;
 	
 	
 		/* Parameter Specifications */

@@ -8,10 +8,10 @@
 #include <QPainter>
 #include <QPoint>
 #include <QColor>
-#include <string.h>
-#include <ostream.h>
-#include <fstream.h>
-#include <vector.h>
+#include <string>
+#include <ostream>
+#include <fstream>
+#include <vector>
 #include <math.h>
 
 typedef double Point2[2];
@@ -30,7 +30,7 @@ class Imageview : public QLabel
 		QPixmap *getPixmap();
 		QSize Getsize();
 		QPixmap* getsavePixmap();
-		vector<double>* GetRepulPoints();
+		std::vector<double>* GetRepulPoints();
 		void setVisuFlip(bool rot90, bool rot180, bool rot270);
 		/* Zoom functions */
 		void Zoom(double factor);
@@ -61,8 +61,8 @@ class Imageview : public QLabel
 		
 		/* Draw point */
 		bool    m_painteventpoint;
-		vector<double>  m_RepulPoints;//i for X, i+1 for Y
-		vector<double>  m_RepulContourPoints;//i for X, i+1 for Y
+		std::vector<double>  m_RepulPoints;//i for X, i+1 for Y
+		std::vector<double>  m_RepulContourPoints;//i for X, i+1 for Y
 		
 		/* Points for drawing */
 		double  m_X;

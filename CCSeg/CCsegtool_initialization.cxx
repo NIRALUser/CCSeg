@@ -5,6 +5,8 @@
 // *************************************************************************
 
 #include "CCsegtool_initialization.h"
+#include <iostream>
+#include <fstream>
 
 /***************************************************************************
  * Constructor
@@ -179,7 +181,10 @@ void CCsegtool_initialization::loadinginputimage(std::string inputFileName, std:
 		std::cerr << "Error: loading image fail : " << e << std::endl;
 		exit(1);
 	}
-	
+
+	// threshold stuff below 0
+	// scale 0..max to 0..255 to work
+
 	try 
 	{
 		// load segmentation
@@ -612,12 +617,12 @@ void CCsegtool_initialization::writeoutput(std::string outfileBase, std::string 
 {
 	std::string outfileParamName;
 	outfileParamName = outfileBase + "/" + nameofproject + "_param.txt";
-	ofstream cfile(outfileParamName.c_str(), ios::out);
-	cfile << "CenterX:" << GetCenterX() << endl;
-	cfile << "CenterY:" << GetCenterY() << endl;
-	cfile << "Scale:" << GetScale() << endl;
-	cfile << "Rotation:" << GetRotation() << endl;
-	cfile << "WMvalue:" << GetWMvalue() << endl;
+	std::ofstream cfile(outfileParamName.c_str(), std::ios::out);
+	cfile << "CenterX:" << GetCenterX() << std::endl;
+	cfile << "CenterY:" << GetCenterY() << std::endl;
+	cfile << "Scale:" << GetScale() << std::endl;
+	cfile << "Rotation:" << GetRotation() << std::endl;
+	cfile << "WMvalue:" << GetWMvalue() << std::endl;
 	cfile.close();
 	
 	try 
@@ -647,8 +652,8 @@ void CCsegtool_initialization::writeoutput(std::string outfileBase, std::string 
 int CCsegtool_initialization::compute_parameters(void)
 {
 	// get largest component in mask only? this can cause troubles if
-	// the brain-stem is larger than the CC, the alternative is
-	// to take the 2 largest components and select the one,
+	// the brain-stem or the cerebellum is larger than the CC, the alternative is
+	// to take the first 3 largest components and select the one,
 	// which is closer to the image center (heuristic...)
 	
 	CCLFilterType::Pointer CCLFilter = CCLFilterType::New();
@@ -657,95 +662,67 @@ int CCsegtool_initialization::compute_parameters(void)
 	//do erosion with star element
 	RelabelFilterType::Pointer RelabelFilter = RelabelFilterType::New();
 	RelabelFilter->SetInput(CCLFilter->GetOutput());
+	ExtractBinaryImageType::Pointer comp1,comp2,comp3;
+	MomentsCalcType::VectorType firstMomentsC1,firstMomentsC2,firstMomentsC3;
+
 	
 	try 
 	{
 		m_thresh1Filter= threshCCLFilterType::New();
 		m_thresh1Filter->SetInput(RelabelFilter->GetOutput());
-		if(m_othercompo)
-		{
-			m_thresh1Filter->SetUpperThreshold(1); // only the largest one
-			m_thresh1Filter->SetLowerThreshold(1);
-		}
-		else
-		{
-			m_thresh1Filter->SetUpperThreshold(2); // only the largest one
-			m_thresh1Filter->SetLowerThreshold(2);
-		}
+		m_thresh1Filter->SetUpperThreshold(1); // only the largest one
+		m_thresh1Filter->SetLowerThreshold(1);
 		m_thresh1Filter->SetOutsideValue( BG_VALUE );
 		m_thresh1Filter->SetInsideValue( LABEL_VALUE );
 		m_thresh1Filter->Update();
-	}
-	catch( itk::ExceptionObject & e )
-	{
-		std::cerr << "Error: threshCCLFilter mask fail : " << e << std::endl;
-		exit(1);
-	}
-	
-	ExtractBinaryImageType::Pointer comp1;
-	MomentsCalcType::VectorType firstMomentsC1;
-	try 
-	{
+
 		comp1 = m_thresh1Filter->GetOutput();
 		MomentsCalcType::Pointer momentCalcC1 = MomentsCalcType::New();
 		momentCalcC1->SetImage(comp1);
 		momentCalcC1->Compute();
 		firstMomentsC1 = momentCalcC1->GetFirstMoments();
 		
-	}
-	catch( itk::ExceptionObject & e )
-	{
-		std::cerr << "Error: Moment calculation 1 error, empty binary segmentation?? : " << e << std::endl;
-		return(1);
-	}
-	
-	try 
-	{
 		m_thresh2Filter = threshCCLFilterType::New();
 		m_thresh2Filter->SetInput(RelabelFilter->GetOutput());
-		if(m_othercompo)
-		{
-			m_thresh2Filter->SetUpperThreshold(1); // only the largest one
-			m_thresh2Filter->SetLowerThreshold(1);
-		}
-		else
-		{
-			m_thresh2Filter->SetUpperThreshold(2); // only the largest one
-			m_thresh2Filter->SetLowerThreshold(2);
-		}
+		m_thresh2Filter->SetUpperThreshold(2); // only the largest one
+		m_thresh2Filter->SetLowerThreshold(2);
 		m_thresh2Filter->SetOutsideValue( BG_VALUE );
 		m_thresh2Filter->SetInsideValue( LABEL_VALUE );
 		m_thresh2Filter->Update();
-	}
-	catch( itk::ExceptionObject & e )
-	{
-		std::cerr << "Error: Cast2d3dFilter mask fail : " << e << std::endl;
-		exit(1);
-	}
-	
-	ExtractBinaryImageType::Pointer comp2;
-	MomentsCalcType::VectorType firstMomentsC2;
-	try 
-	{
+
 		comp2 = m_thresh2Filter->GetOutput();
 		MomentsCalcType::Pointer momentCalcC2 = MomentsCalcType::New();
 		momentCalcC2->SetImage(comp2);
 		momentCalcC2->Compute();
 		firstMomentsC2 = momentCalcC2->GetFirstMoments();
+
+		m_thresh3Filter = threshCCLFilterType::New();
+		m_thresh3Filter->SetInput(RelabelFilter->GetOutput());
+		m_thresh3Filter->SetUpperThreshold(3); // only the largest one
+		m_thresh3Filter->SetLowerThreshold(3);
+		m_thresh3Filter->SetOutsideValue( BG_VALUE );
+		m_thresh3Filter->SetInsideValue( LABEL_VALUE );
+		m_thresh3Filter->Update();
+
+		comp3 = m_thresh3Filter->GetOutput();
+		MomentsCalcType::Pointer momentCalcC3 = MomentsCalcType::New();
+		momentCalcC3->SetImage(comp3);
+		momentCalcC3->Compute();
+		firstMomentsC3 = momentCalcC3->GetFirstMoments();
 	}
 	catch( itk::ExceptionObject & e )
 	{
-		std::cerr << "Error: Moment calculation 2 error, empty binary segmentation?? : " << e << std::endl;
+		std::cerr << "Error: Moment calculation error, empty binary segmentation?? : " << e << std::endl;
 		return(1);
 	}
 	
 	// compare centers
 	double imageCenter[2];
-	ExtractImageType::RegionType extractregion;
-	extractregion = m_extractImage->GetLargestPossibleRegion();
+	ExtractImageType::RegionType extractregion = m_extractImage->GetLargestPossibleRegion();
+	//ExtractImageType::PointType origin =  m_extractImage->GetOrigin();
 	// Assuming ACPC alignment the CC is slightly superiorly to the image center
 	imageCenter[0] = (extractregion.GetSize())[0] / 2;
-	imageCenter[1] = (extractregion.GetSize())[1] * 6 / 10 ; // 10 % off from the center
+	imageCenter[1] = (extractregion.GetSize())[1] / 2;
 	double distC1 = sqrt((imageCenter[0] - firstMomentsC1[0]) * 
 				(imageCenter[0] - firstMomentsC1[0]) + 
 				(imageCenter[1] - firstMomentsC1[1]) * 
@@ -754,10 +731,61 @@ int CCsegtool_initialization::compute_parameters(void)
 				(imageCenter[0] - firstMomentsC2[0]) + 
 				(imageCenter[1] - firstMomentsC2[1]) * 
 				(imageCenter[1] - firstMomentsC2[1]));
-	if (distC1 < distC2)
+	double distC3 = sqrt((imageCenter[0] - firstMomentsC3[0]) * 
+				(imageCenter[0] - firstMomentsC3[0]) + 
+				(imageCenter[1] - firstMomentsC3[1]) * 
+				(imageCenter[1] - firstMomentsC3[1]));
+	//std::cout << "dists: " << distC1 << ", " << distC2 << ", "<< distC3 << std::endl;
+	//std::cout << (extractregion.GetSize())[0] << ", " << (extractregion.GetSize())[1] << std::endl;
+	//std::cout << imageCenter[0] << ", " << imageCenter[1] << std::endl;
+	if (distC1 < distC2) {
+	  if (distC1 < distC3) {
+	    if (!m_othercompo) {
 		m_extractMask = comp1;
-	else
-		m_extractMask = comp2;
+		std::cout << "choosing first" << std::endl;
+	    } else {
+	      if (distC2 < distC3) {
+	    	m_extractMask = comp2;
+		std::cout << "choosing second" << std::endl;
+	      } else {
+		m_extractMask = comp3;
+		std::cout << "choosing third" << std::endl;
+	      }
+	    }
+	  } else {
+	    if (!m_othercompo) {
+		m_extractMask = comp3;
+		std::cout << "choosing third" << std::endl;
+	    } else {
+	    	m_extractMask = comp1;
+		std::cout << "choosing first" << std::endl;
+	    }
+	  }
+	} else {
+	  if (distC2 < distC3) {
+	    if (!m_othercompo) {
+	      m_extractMask = comp2;
+		std::cout << "choosing second" << std::endl;
+	    } else {
+	      if (distC1 < distC3) {
+		m_extractMask = comp1;
+		std::cout << "choosing first" << std::endl;
+	      } else {
+		m_extractMask = comp3;
+		std::cout << "choosing third" << std::endl;
+	      }
+	    }
+	  }else {
+	    if (!m_othercompo) {
+		m_extractMask = comp3;
+		std::cout << "choosing third" << std::endl;
+	    } else {
+	    	m_extractMask = comp2;
+		std::cout << "choosing second" << std::endl;
+	    }
+	  }
+	}
+
 	
 	// Moments are needed for initialization of pose
 	MomentsCalcType::Pointer momentCalc = MomentsCalcType::New();
@@ -772,7 +800,7 @@ int CCsegtool_initialization::compute_parameters(void)
 	//angle is angle between x-axis and 2nd principal axes (or y-axis and 1st)
 	// principal axes are normalized
 	// With a flip, change the rotation value by 2*Pi - init value
-	double anglePrincAxes;
+	double anglePrincAxes =  0;
 	if(m_reflectXOn || m_reflectYOn || m_permute_x_y)
 	{
 		if(m_reflectXOn)
@@ -838,17 +866,22 @@ int CCsegtool_initialization::compute_parameters(void)
 	
 	// Histogram computation
 	HistogramType::SizeType size;
+	size.SetSize(1);
 	size[0] = numBins;
 
 	HistogramType::MeasurementVectorType minValVector, maxValVector;
+	minValVector.SetSize(1);
+	maxValVector.SetSize(1);
 	minValVector[0] = minval;
 	maxValVector[0] = maxval + 1;
 	
 	HistogramType::Pointer histogram = HistogramType::New();
+	histogram->SetMeasurementVectorSize(1);
 	histogram->Initialize( size, minValVector, maxValVector );
 	
 	// put each image pixel into the histogram
 	HistogramType::MeasurementVectorType measurement;
+	measurement.SetSize(1);
 	Iterator iter (maskedImage, maskedImage->GetBufferedRegion());
 	while ( !iter.IsAtEnd() )
 	{

@@ -1,4 +1,5 @@
 #include "Imageview.h"
+#include <iostream>
 
 /*********************************************************************************
  * Constructor
@@ -237,7 +238,7 @@ QSize Imageview::Getsize()
 	return m_Size;
 }
 
-vector<double>* Imageview::GetRepulPoints()
+std::vector<double>* Imageview::GetRepulPoints()
 {
 	return &m_RepulPoints;
 }
