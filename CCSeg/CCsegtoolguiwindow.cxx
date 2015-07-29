@@ -642,7 +642,7 @@ void CCsegtoolguiwindow::browserImage()
 	QString filename,type;
 	std::string image;
 	filename = QFileDialog::getOpenFileName(this, "Open File input image", "/", 
-			"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type);
+			"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd *.nii *.nii.gz)",&type);
 	
 	if(m_Debug)
 		std::cout<<"Filename : "<< (filename.toStdString()).c_str() <<std::endl;
@@ -673,12 +673,12 @@ void CCsegtoolguiwindow::browserMask()
 		if(m_Debug)
 			std::cout<<"directory path : "<<(directoryPath.toStdString()).c_str()<<std::endl;
 		filename = QFileDialog::getOpenFileName(this, "Open File input image", directoryPath, 
-				"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type);
+				"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd *.nii *.nii.gz)",&type);
 	}
 	else
 	{
 		filename = QFileDialog::getOpenFileName(this, "Open File binary mask","/",
-			"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd)",&type);
+			"Images (*.gipl *.gipl.gz *.mhd *.mha *.img *.hdr *.nhdr *.nrrd *.nii *.nii.gz)",&type);
 	}
 	
 	if(m_Debug)
