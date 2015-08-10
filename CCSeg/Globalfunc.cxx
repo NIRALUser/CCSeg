@@ -1,7 +1,7 @@
 #include "Globalfunc.h"
 
 /**************************************************************************************
- * Initialization of the parameters : calcule the CCsegtool_initialization, parameters 
+ * Initialization of the parameters : calculate the CCsegtool_initialization, parameters
  * and computation, then run the first step for one iteration. 
  * Draw the image with the model.
  *************************************************************************************/

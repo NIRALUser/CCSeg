@@ -70,6 +70,9 @@ int CCsegtool_initialization::compute_initialization(std::string inputFileName,s
 			ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
 			extractFilter->SetInput(m_preProcImage);
 			extractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+			extractFilter->SetDirectionCollapseToIdentity();
+#endif
 			extractFilter->Update();
 			m_inputImage = extractFilter->GetOutput();
 		}
@@ -175,6 +178,35 @@ void CCsegtool_initialization::loadinginputimage(std::string inputFileName, std:
 		// Take the Size and spacing of the 3D input image for Proba
 		m_imagesize    = m_loadImage->GetLargestPossibleRegion().GetSize();
 		m_imagespacing = m_loadImage->GetSpacing();
+		MinimumMaximumType::Pointer minmax = MinimumMaximumType::New();
+		minmax->SetInput(imageReader->GetOutput());
+		minmax->Update();
+
+		if (minmax->GetMinimum() < 0 || minmax->GetMaximum() > 255) {
+			HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
+
+			histogramFilter->SetNumberOfBins( 255 );
+			histogramFilter->SetMarginalScale( 1 );
+			histogramFilter->SetHistogramMin( 0 );
+			histogramFilter->SetHistogramMax( 32000 );
+			histogramFilter->SetInput( imageReader->GetOutput() );
+			histogramFilter->Compute();
+			const HistogramFilterType::HistogramType   *histo=histogramFilter->GetOutput();
+
+			double lower;
+			double upper;
+			lower = histo->Quantile(0,0.02);
+			upper = histo->Quantile(0,0.995);
+
+			WindowingFilterType::Pointer windowingFilter = WindowingFilterType::New();
+			windowingFilter->SetInput( imageReader->GetOutput() );
+			windowingFilter->SetOutputMinimum( 0 );
+			windowingFilter->SetOutputMaximum( 255 );
+			windowingFilter->SetWindowMinimum( lower );
+			windowingFilter->SetWindowMaximum( upper );
+			windowingFilter->Update();
+			m_loadImage = windowingFilter->GetOutput();
+		}
 	}	
 	catch( itk::ExceptionObject & e )
 	{
@@ -260,6 +292,9 @@ void CCsegtool_initialization::extract_Midsagtital_planes(int sliceDir, std::str
 		BinaryExtractFilterType::Pointer binaryExtractFilter = BinaryExtractFilterType::New();
 		binaryExtractFilter->SetInput(m_loadMask);
 		binaryExtractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+		binaryExtractFilter->SetDirectionCollapseToIdentity();
+#endif
 		binaryExtractFilter->Update();
 		m_mask = binaryExtractFilter->GetOutput();
 	}
@@ -287,6 +322,9 @@ void CCsegtool_initialization::averaging(int averageNum, int sliceDir,  std::str
 		ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
 		extractFilter->SetInput(m_preProcImage);
 		extractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+		extractFilter->SetDirectionCollapseToIdentity();
+#endif
 		extractFilter->Update();
 		m_inputImage = extractFilter->GetOutput();
 		m_Region = m_inputImage->GetLargestPossibleRegion();
@@ -309,6 +347,9 @@ void CCsegtool_initialization::averaging(int averageNum, int sliceDir,  std::str
 			m_extractFilter = ExtractFilterType::New();
 			m_extractFilter->SetInput(m_preProcImage);
 			m_extractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+			m_extractFilter->SetDirectionCollapseToIdentity();
+#endif
 			m_extractFilter->Update();
 		}
 		catch( itk::ExceptionObject & e )
@@ -797,7 +838,7 @@ int CCsegtool_initialization::compute_parameters(void)
 
 	// COG is in physical coordinates, first moment is COG in index coordinates
 	MomentsCalcType::MatrixType principalAxes = momentCalc->GetPrincipalAxes();
-	//angle is angle between x-axis and 2nd principal axes (or y-axis and 1st)
+	// angle is angle between x-axis and 2nd principal axes (or y-axis and 1st)
 	// principal axes are normalized
 	// With a flip, change the rotation value by 2*Pi - init value
 	double anglePrincAxes =  0;
@@ -888,7 +929,11 @@ int CCsegtool_initialization::compute_parameters(void)
 		InputPixelType value = iter.Get();
 		if (value > BG_VALUE) { // is pixel in mask
 			measurement[0] = value;
+#if  ITK_VERSION_MAJOR >=4
+			histogram->IncreaseFrequencyOfMeasurement( measurement , 1 );
+#else
 			histogram->IncreaseFrequency( measurement , 1 );
+#endif
 		}
 		++iter;
 	}

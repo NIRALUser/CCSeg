@@ -400,7 +400,11 @@ void CCsegtool_parameters::transform2DIndex_3Dindex(Point2* pts, int numpts, std
 	std::string outfilePDMName;
 	outfilePDMName = path_output + "/" + nameofproject + "_3D.vtk";
 	vtkSmartPointer<vtkPolyDataWriter> writer = vtkSmartPointer<vtkPolyDataWriter>::New();
+#if VTK_MAJOR_VERSION >= 6
+	writer->SetInputData(polyData);
+#else
 	writer->SetInput(polyData);
+#endif
 	writer->SetFileName(outfilePDMName.c_str());
 	writer->SetFileTypeToBinary();
 	writer->Write();
