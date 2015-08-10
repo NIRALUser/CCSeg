@@ -153,7 +153,7 @@ class CCsegtool_initialization
 	protected:
 		void loadinginputimage(std::string inputFileName, std::string segFile);
 		void vesselremoval(bool segLabel);
-		void extract_Midsagtital_planes(int sliceDir, std::string MidPlaneSliceNumber);
+		void extract_Midsagittal_planes(int sliceDir, std::string MidPlaneSliceNumber);
 		void averaging(int averageNum, int sliceDir, std::string MidPlaneSliceNumber);
 		void dopermute_x_y();
 		void reflectX();
