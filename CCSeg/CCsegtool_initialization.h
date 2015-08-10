@@ -32,6 +32,9 @@
 #include <itkExtractImageFilter.h> 
 #include <itkPermuteAxesImageFilter.h> 
 #include <itkCastImageFilter.h> 
+#include <itkMinimumMaximumImageFilter.h>
+#include "itkIntensityWindowingImageFilter.h"
+#include "itkScalarImageToHistogramGenerator.h"
 
 typedef double Point2[2];
 typedef double Point3[3];
@@ -110,6 +113,10 @@ typedef itk::AddImageFilter<ExtractImageType,ExtractImageType,ExtractImageType> 
 typedef itk::ShiftScaleImageFilter<ExtractImageType,ExtractImageType>               ScaleFilterType;
 typedef itk::ImageMomentsCalculator< BinaryImageType >                              MomentsCalcType;
 
+typedef itk::MinimumMaximumImageFilter< InputImageType >			        MinimumMaximumType;
+typedef itk::Statistics::ScalarImageToHistogramGenerator< InputImageType > 		HistogramFilterType;
+typedef itk::IntensityWindowingImageFilter< InputImageType, InputImageType > 		WindowingFilterType;
+
 class CCsegtool_initialization
 {
 	public:
@@ -118,6 +125,7 @@ class CCsegtool_initialization
 		
 		static const int BG_VALUE = 0;
 		static const int LABEL_VALUE = 1;
+		static const int NUM_COMPONENTS = 5;
 		
 		int compute_initialization(std::string inputFileName, std::string segFile, bool vesselRemoveOn, 
 					    bool segLabel, int averageNum, bool permute_x_y, bool reflectXOn, 

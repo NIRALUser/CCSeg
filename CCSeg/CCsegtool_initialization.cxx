@@ -175,6 +175,35 @@ void CCsegtool_initialization::loadinginputimage(std::string inputFileName, std:
 		// Take the Size and spacing of the 3D input image for Proba
 		m_imagesize    = m_loadImage->GetLargestPossibleRegion().GetSize();
 		m_imagespacing = m_loadImage->GetSpacing();
+		MinimumMaximumType::Pointer minmax = MinimumMaximumType::New();
+		minmax->SetInput(imageReader->GetOutput());
+		minmax->Update();
+
+		if (minmax->GetMinimum() < 0 || minmax->GetMaximum() > 255) {
+			HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
+
+			histogramFilter->SetNumberOfBins( 255 );
+			histogramFilter->SetMarginalScale( 1 );
+			histogramFilter->SetHistogramMin( 0 );
+			histogramFilter->SetHistogramMax( 32000 );
+			histogramFilter->SetInput( imageReader->GetOutput() );
+			histogramFilter->Compute();
+			const HistogramFilterType::HistogramType   *histo=histogramFilter->GetOutput();
+
+			double lower;
+			double upper;
+			lower = histo->Quantile(0,0.02);
+			upper = histo->Quantile(0,0.995);
+
+			WindowingFilterType::Pointer windowingFilter = WindowingFilterType::New();
+			windowingFilter->SetInput( imageReader->GetOutput() );
+			windowingFilter->SetOutputMinimum( 0 );
+			windowingFilter->SetOutputMaximum( 255 );
+			windowingFilter->SetWindowMinimum( lower );
+			windowingFilter->SetWindowMaximum( upper );
+			windowingFilter->Update();
+			m_loadImage = windowingFilter->GetOutput();
+		}
 	}	
 	catch( itk::ExceptionObject & e )
 	{
