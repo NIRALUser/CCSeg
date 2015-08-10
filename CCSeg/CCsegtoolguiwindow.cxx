@@ -435,12 +435,12 @@ void CCsegtoolguiwindow::setvalue()
 	//imagemask
 	m_MaskImage = imagemask->text().toStdString();
 	//pathoutput
-	if(pathoutput->text().compare("")==0)
+	if(pathoutput->text().isEmpty())
 		m_outputfolder= m_InputImage.substr(0, m_InputImage.find_last_of("/"));
 	else
 		m_outputfolder = pathoutput->text().toStdString();
 	//Name of project
-	if(nameofproject->text().compare("")==0)
+	if(nameofproject->text().isEmpty())
 		m_nameofproject = m_InputImage.substr(m_InputImage.find_last_of("/")+1,
 			m_InputImage.find_last_of(".")-m_InputImage.find_last_of("/")-1);
 	else
