@@ -70,6 +70,9 @@ int CCsegtool_initialization::compute_initialization(std::string inputFileName,s
 			ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
 			extractFilter->SetInput(m_preProcImage);
 			extractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+			extractFilter->SetDirectionCollapseToIdentity();
+#endif
 			extractFilter->Update();
 			m_inputImage = extractFilter->GetOutput();
 		}
@@ -289,6 +292,9 @@ void CCsegtool_initialization::extract_Midsagtital_planes(int sliceDir, std::str
 		BinaryExtractFilterType::Pointer binaryExtractFilter = BinaryExtractFilterType::New();
 		binaryExtractFilter->SetInput(m_loadMask);
 		binaryExtractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+		binaryExtractFilter->SetDirectionCollapseToIdentity();
+#endif
 		binaryExtractFilter->Update();
 		m_mask = binaryExtractFilter->GetOutput();
 	}
@@ -316,6 +322,9 @@ void CCsegtool_initialization::averaging(int averageNum, int sliceDir,  std::str
 		ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
 		extractFilter->SetInput(m_preProcImage);
 		extractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+		extractFilter->SetDirectionCollapseToIdentity();
+#endif
 		extractFilter->Update();
 		m_inputImage = extractFilter->GetOutput();
 		m_Region = m_inputImage->GetLargestPossibleRegion();
@@ -338,6 +347,9 @@ void CCsegtool_initialization::averaging(int averageNum, int sliceDir,  std::str
 			m_extractFilter = ExtractFilterType::New();
 			m_extractFilter->SetInput(m_preProcImage);
 			m_extractFilter->SetExtractionRegion(m_extractRegion);
+#if  ITK_VERSION_MAJOR >=4
+			m_extractFilter->SetDirectionCollapseToIdentity();
+#endif
 			m_extractFilter->Update();
 		}
 		catch( itk::ExceptionObject & e )
