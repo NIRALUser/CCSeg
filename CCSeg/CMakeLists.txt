@@ -47,6 +47,10 @@ SET(CCSeg_source CCsegtool.cxx CCsegtoolguiwindow.cxx Imageview.cxx Globalfunc.c
 GENERATECLP(CCsegtool.cxx CCsegtool.xml)
 add_executable( CCSeg ${CCSeg_source})
 
+if( VTK_MAJOR_VERSION VERSION_LESS 6 )
+  list( APPEND VTK_LIBRARIES vtkHybrid )
+endif()
+
 TARGET_LINK_LIBRARIES(CCSeg
   ${ITK_LIBRARIES}
   ${VTK_LIBRARIES}
