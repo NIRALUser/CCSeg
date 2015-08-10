@@ -101,7 +101,7 @@ void CCsegtool_computation::setRepulPoints(std::vector<double> *RepulPoints)
  *****************************************************************************/
 float CCsegtool_computation::execution(CCsegtool_parameters * parameters, int step,int lambdamax, int iteration, bool update)
 {
-	/*if this is a second or more step, reinitialization of the pointeur parameters to keep the changement*/
+	/*if this is a second or later step, reinitialization of the pointer parameters to keep the changes*/
 	if(step>1)
 	{
 		m_parameters=parameters;
@@ -516,7 +516,7 @@ void CCsegtool_computation::reconstructCurve(Point2* pts, int number_pts)
 		fourier_reconst(m_coefs, m_num_coefs, m_centroid, number_pts, pts);
 	}
 	else
-		std::cout<<"Error: To much point for drawing the contour, 256 is the maximun."<<std::endl;
+		std::cout<<"Error: Too many points for drawing the contour, 256 is the maximun."<<std::endl;
 }
 
 /***************************************************************************** 

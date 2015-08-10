@@ -9,7 +9,7 @@
 #include <fstream>
 #include <ostream>
 
-//ITK librairies for Image
+//ITK libraries for Image
 #include <itkObject.h>
 #include <itkImage.h>
 #include <itkObjectFactory.h>

@@ -797,7 +797,7 @@ int CCsegtool_initialization::compute_parameters(void)
 
 	// COG is in physical coordinates, first moment is COG in index coordinates
 	MomentsCalcType::MatrixType principalAxes = momentCalc->GetPrincipalAxes();
-	//angle is angle between x-axis and 2nd principal axes (or y-axis and 1st)
+	// angle is angle between x-axis and 2nd principal axes (or y-axis and 1st)
 	// principal axes are normalized
 	// With a flip, change the rotation value by 2*Pi - init value
 	double anglePrincAxes =  0;
