@@ -888,7 +888,11 @@ int CCsegtool_initialization::compute_parameters(void)
 		InputPixelType value = iter.Get();
 		if (value > BG_VALUE) { // is pixel in mask
 			measurement[0] = value;
+#if  ITK_VERSION_MAJOR >=4
+			histogram->IncreaseFrequencyOfMeasurement( measurement , 1 );
+#else
 			histogram->IncreaseFrequency( measurement , 1 );
+#endif
 		}
 		++iter;
 	}
