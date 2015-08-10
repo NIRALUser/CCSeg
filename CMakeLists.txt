@@ -9,6 +9,25 @@ include(${BRAINS_CMAKE_HELPER_DIR}/CMakeBuildMacros.cmake)
 include(${BRAINS_CMAKE_HELPER_DIR}/PreventInSourceBuilds.cmake)
 include(${BRAINS_CMAKE_HELPER_DIR}/CMakeCommonExternalDefinitions.cmake)
 
+#-----------------------------------------------------------------------------
+# Git protocole option
+#-----------------------------------------------------------------------------
+option(USE_GIT_PROTOCOL "If behind a firewall turn this off to use http
+instead." ON)
+set(git_protocol "git")
+if(NOT USE_GIT_PROTOCOL)
+  set(git_protocol "http")
+endif()
+
+#-----------------------------------------------------------------------------
+# Set a default build type if none was specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
 #External Projects
 include(ExternalProject)
 if(CMAKE_EXTRA_GENERATOR)
@@ -28,9 +47,11 @@ ENDIF(QT_USE_FILE)
 
 OPTION(COMPILE_CCSeg "Compile CCSeg." ON)
 IF(COMPILE_CCSeg)
+  # ITK must be searched for before SlicerExecutionModel as ITK_DEPEND needs to be initialized
+  # in PACKAGE_NEEDS_ITK() before it is used in PACKAGE_NEEDS_SlicerExecutionModel()
   PACKAGE_NEEDS_ITK("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
-  PACKAGE_NEEDS_VTKWITHQT("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
   PACKAGE_NEEDS_SlicerExecutionModel("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
+  PACKAGE_NEEDS_VTKWITHQT("${LOCAL_CMAKE_BUILD_OPTIONS}" "${gen}")
   set(proj CCSeg)
   ExternalProject_Add(${proj}
     DOWNLOAD_COMMAND ""
@@ -45,8 +66,7 @@ IF(COMPILE_CCSeg)
       -DGenerateCLP_DIR:PATH=${GenerateCLP_DIR}
       -DITK_DIR:PATH=${ITK_DIR}
       -DVTK_DIR:PATH=${VTK_DIR}
-    #INSTALL_COMMAND ""
-    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    INSTALL_COMMAND ""
   )
   FORCE_BUILD_CHECK(${proj})
 ENDIF(COMPILE_CCSeg)
