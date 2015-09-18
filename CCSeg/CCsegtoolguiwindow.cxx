@@ -764,7 +764,7 @@ void CCsegtoolguiwindow::help()
 	help += "  - debug, Default=off\n";
 	help += "  - PSDistance : Profile Sampling Distance, DEFAULT=0.5\n";
 	help += "  - Slice Direction [0|1|2] slicing direction (0=x,1=y,2=z), DEFAULT = 0\n";
-	help += "  - Midsagital Plane Slice is the number of slice in the direction of SliceDir(0 to max), DEFAULT = middle\n";
+	help += "  - Midsagittal Plane Slice is the number of slice in the direction of SliceDir(0 to max), DEFAULT = middle\n";
 	help += "  - Average number : number of slices for averaging the gray values, if 0, no averaging is done, DEFAULT=2\n";
 	help += "  - Number of points for the drawing, Default=256\n";
 	help += "  - rotate the contour by adding an angle, Default=0 degrees\n";
@@ -837,7 +837,7 @@ void CCsegtoolguiwindow::saveparam()
 			savefile << "Unconstrained : " << UnConstrained->isChecked() <<endl;
 			savefile << "Segmentation Label : " << SegLabel->isChecked() <<endl;
 			savefile << "Slice Direction : " << SliceDir->text().toInt() <<endl;
-			savefile << "Midsagital Plane Slice : " << Midsaggitalplaneslice->text().toStdString() <<endl;
+			savefile << "Midsagittal Plane Slice : " << Midsaggitalplaneslice->text().toStdString() <<endl;
 			savefile << "Number of average : " << averagenum->text().toInt() <<endl;
 			savefile << "Fix Similarity XForm : " << FSXform->isChecked() <<endl;
 			savefile << "PSDistance : " << PSDistance->text().toFloat() <<endl;
@@ -982,7 +982,7 @@ void CCsegtoolguiwindow::openparam()
 					else if(buf1.compare(0,18,"Slice Direction : ")==0)
 						SliceDir->setText((buf1.substr(18,buf1.size()-18)).c_str());
 					
-					else if(buf1.compare(0,25,"Midsagital Plane Slice : ")==0)
+					else if(buf1.compare(0,25,"Midsagittal Plane Slice : ")==0)
 						Midsaggitalplaneslice->setText((buf1.substr(25,buf1.size()-25)).c_str());
 					
 					else if(buf1.compare(0,20,"Number of average : ")==0)
