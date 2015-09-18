@@ -57,8 +57,8 @@ int CCsegtool_initialization::compute_initialization(std::string inputFileName,s
 	else
 		m_preProcImage = m_loadImage;
 
-	// Extract Midsagtital planes
-	extract_Midsagtital_planes(sliceDir, MidPlaneSliceNumber);
+	// Extract Midsagittal planes
+	extract_Midsagittal_planes(sliceDir, MidPlaneSliceNumber);
 	
 	//Averaging?
 	if (averageNum > 0)
@@ -272,9 +272,9 @@ void CCsegtool_initialization::vesselremoval(bool segLabel)
 
 
 /***************************************************************************
- * Extract the Midsagtital planes and set it for the mask
+ * Extract the Midsagittal planes and set it for the mask
  ***************************************************************************/
-void CCsegtool_initialization::extract_Midsagtital_planes(int sliceDir, std::string MidPlaneSliceNumber)
+void CCsegtool_initialization::extract_Midsagittal_planes(int sliceDir, std::string MidPlaneSliceNumber)
 {
 	m_extractRegion = m_preProcImage->GetLargestPossibleRegion();
 	m_extractRegion.SetIndex(0,0);
@@ -300,7 +300,7 @@ void CCsegtool_initialization::extract_Midsagtital_planes(int sliceDir, std::str
 	}
 	catch( itk::ExceptionObject & e )
 	{
-		std::cerr << "Error: extract_Midsagtital_planes fail : " << e << std::endl;
+		std::cerr << "Error: extract_Midsagittal_planes fail : " << e << std::endl;
 		exit(1);
 	}
 }
