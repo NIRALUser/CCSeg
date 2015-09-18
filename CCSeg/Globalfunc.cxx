@@ -14,7 +14,7 @@ int initialize( std::string Image_filename, std::string Seg_filename, std::strin
 		int Lambdamax, std::string Coefofoptim, bool debug, bool withgui, Imageview * &imageview,
 		CCsegtool_parameters* &last_parameters, double *lastX, double *lastY, double *lastScale, double *lastRot,
 		float scalefactor, bool othercompo, int angle, bool rot90, bool rot180, bool rot270, 
-		QWidget * parent, QLabel* parametersinitview, QLabel* Arealabel, QLabel* Midsaggitalplaneslicevalue)
+		QWidget * parent, QLabel* parametersinitview, QLabel* Arealabel, QLabel* Midsagittalplaneslicevalue)
 {
 	/* create local variables */
 	float disp = 100000000;
@@ -48,7 +48,7 @@ int initialize( std::string Image_filename, std::string Seg_filename, std::strin
 		QString text = "(0 to ";
 		text.append((SnumberSlice.str()).c_str());
 		text.append(")");
-		Midsaggitalplaneslicevalue->setText(text);
+		Midsagittalplaneslicevalue->setText(text);
 		
 		/* Proba parameters setting */
 		ImageSize = initialization->Get3DImageSize();
