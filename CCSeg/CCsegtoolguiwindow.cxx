@@ -99,7 +99,7 @@ CCsegtoolguiwindow::CCsegtoolguiwindow(float scalefactor, bool Debug, QWidget * 
 	connect(this->DoubleOn, SIGNAL(stateChanged(int)), this, SLOT(ConPreview()));
 	connect(this->interpolationlinear, SIGNAL(stateChanged(int)), this, SLOT(ConPreview()));
 	connect(this->imagemask, SIGNAL(editingFinished()), this, SLOT(InitPreview()));
-	connect(this->Midsaggitalplaneslice, SIGNAL(editingFinished()), this, SLOT(ConPreview()));
+	connect(this->Midsagittalplaneslice, SIGNAL(editingFinished()), this, SLOT(ConPreview()));
 	connect(this->averagenum, SIGNAL(editingFinished()), this, SLOT(ConPreview()));
 	connect(this->SliceDir, SIGNAL(editingFinished()), this, SLOT(InitPreview()));
 	connect(this->othercomponant, SIGNAL(stateChanged(int)), this, SLOT(ConPreview()));
@@ -208,7 +208,7 @@ void CCsegtoolguiwindow::Preview(int resetVisu)
 			   m_PSDistance, m_unconstrained, m_WMvalue, m_MPSDisplacement, m_loop, m_Lambdamax, m_Coefofoptim,
 			   m_Debug, true, m_viewimage, m_last_parameters, &m_lastX, &m_lastY, &m_lastScale, &m_lastRot,
 			   m_scalefactor, m_othercomponant, m_angle, m_rot90, m_rot180, m_rot270, 
-			   this, this->parametersinitview, this->Arealabel, this->Midsaggitalplaneslicevalue)!=0)
+			   this, this->parametersinitview, this->Arealabel, this->Midsagittalplaneslicevalue)!=0)
 				QMessageBox::information(this, "Warning", "Problem with the images or with the Slice direction. Total Mass of the image was zero. Aborting here to prevent division by zero later on.");
 			else
 			{
@@ -505,7 +505,7 @@ void CCsegtoolguiwindow::setvalue()
 	//Slice direction
 	m_slicedir = SliceDir->text().toInt() ;
 	//MidPlaneSliceNumber
-	m_MidPlaneSliceNumber = Midsaggitalplaneslice->text().toStdString();
+	m_MidPlaneSliceNumber = Midsagittalplaneslice->text().toStdString();
 	//averagenum
 	m_averagenum = averagenum->text().toInt() ;
 	//PSDistance
@@ -605,7 +605,7 @@ void CCsegtoolguiwindow::defaultparamcomputation()
 	SliceDir->setText(qstr.setNum(m_slicedir));
 	//MidPlaneSliceNumber
 	m_MidPlaneSliceNumber = "default";
-	Midsaggitalplaneslice->setText(m_MidPlaneSliceNumber.c_str());
+	Midsagittalplaneslice->setText(m_MidPlaneSliceNumber.c_str());
 	//averagenum
 	m_averagenum = 2;
 	averagenum->setText(qstr.setNum(m_averagenum));
@@ -791,7 +791,7 @@ void CCsegtoolguiwindow::newparam()
 		parametersinitview->clear();
 		instructionsview->clear();
 		Arealabel->clear();
-		Midsaggitalplaneslicevalue->clear();
+		Midsagittalplaneslicevalue->clear();
 		m_viewimage->hide();
 		m_viewimage = NULL;
 		defaultparaminput();
@@ -837,7 +837,7 @@ void CCsegtoolguiwindow::saveparam()
 			savefile << "Unconstrained : " << UnConstrained->isChecked() <<endl;
 			savefile << "Segmentation Label : " << SegLabel->isChecked() <<endl;
 			savefile << "Slice Direction : " << SliceDir->text().toInt() <<endl;
-			savefile << "Midsagittal Plane Slice : " << Midsaggitalplaneslice->text().toStdString() <<endl;
+			savefile << "Midsagittal Plane Slice : " << Midsagittalplaneslice->text().toStdString() <<endl;
 			savefile << "Number of average : " << averagenum->text().toInt() <<endl;
 			savefile << "Fix Similarity XForm : " << FSXform->isChecked() <<endl;
 			savefile << "PSDistance : " << PSDistance->text().toFloat() <<endl;
@@ -983,7 +983,7 @@ void CCsegtoolguiwindow::openparam()
 						SliceDir->setText((buf1.substr(18,buf1.size()-18)).c_str());
 					
 					else if(buf1.compare(0,25,"Midsagittal Plane Slice : ")==0)
-						Midsaggitalplaneslice->setText((buf1.substr(25,buf1.size()-25)).c_str());
+						Midsagittalplaneslice->setText((buf1.substr(25,buf1.size()-25)).c_str());
 					
 					else if(buf1.compare(0,20,"Number of average : ")==0)
 						averagenum->setText((buf1.substr(20,buf1.size()-20)).c_str());

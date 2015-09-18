@@ -713,21 +713,21 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="Midsaggitalplaneslicetitle">
+             <widget class="QLabel" name="Midsagittalplaneslicetitle">
               <property name="text">
-               <string>Midsaggital plane slice :</string>
+               <string>Midsagittal plane slice :</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="Midsaggitalplaneslicevalue">
+             <widget class="QLabel" name="Midsagittalplaneslicevalue">
               <property name="text">
                <string/>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="Midsaggitalplaneslice">
+             <widget class="QLineEdit" name="Midsagittalplaneslice">
               <property name="inputMask">
                <string/>
               </property>

@@ -17,7 +17,7 @@ int initialize(std::string Image_filename, std::string Seg_filename, std::string
 			   double *lastRot, float scalefactor, bool othercompo, int angle, 
 			   bool rot90=false, bool rot180=false, bool rot270=false,
 			   QWidget * parent=NULL, QLabel* parametersinitview=NULL, QLabel* Arealabel=NULL, 
-			   QLabel* Midsaggitalplaneslicevalue=NULL);
+			   QLabel* Midsagittalplaneslicevalue=NULL);
 void compute( std::string Path_output, std::string nameofproject, int number_pts, bool Unconstrained, 
 	      std::string WMintensity, std::string MPSDisplacement, std::string Number_iteration, int Lambdamax,
 	      std::string Coefofoptim, bool debug, bool withgui, Imageview * &imageview, 
