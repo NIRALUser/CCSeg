@@ -82,6 +82,7 @@ CCsegtoolguiwindow::CCsegtoolguiwindow(float scalefactor, bool Debug, QWidget * 
 	connect(this->browmask, SIGNAL(clicked()), this, SLOT(browserMask()));
 	connect(this->browCCAtlasDirectory, SIGNAL(clicked()), this, SLOT(browserCCAtlasDirectory()));
 	connect(this->browpathoutput, SIGNAL(clicked()), this, SLOT(browserOutput()));
+	CCAtlasDirectorybox->setText(getenv("CCSEG_ATLASDIR") ? getenv("CCSEG_ATLASDIR") : QDir::currentPath());
 	
 	//"File" action
 	connect(this->actionNew, SIGNAL(triggered()), SLOT(newparam()));
@@ -711,7 +712,7 @@ void CCsegtoolguiwindow::browserMask()
  ********************************************************************************/
 void CCsegtoolguiwindow::browserCCAtlasDirectory()
 {
-	QString path = QFileDialog::getExistingDirectory(this);
+       QString path = QFileDialog::getExistingDirectory(this, tr("Select Atlas Directory"), get_current_dir_name());
 	if(path!=NULL)
 		CCAtlasDirectorybox->setText(path);
 }
