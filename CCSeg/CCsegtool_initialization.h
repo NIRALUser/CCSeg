@@ -127,7 +127,7 @@ class CCsegtool_initialization
 		static const int LABEL_VALUE = 1;
 		static const int NUM_COMPONENTS = 5;
 		
-		int compute_initialization(std::string inputFileName, std::string segFile, bool vesselRemoveOn, 
+		int compute_initialization(std::string inputFileName, std::string segFileName, bool vesselRemoveOn,
 					    bool segLabel, int averageNum, bool permute_x_y, bool reflectXOn, 
 					    bool reflectYOn, bool openOn, bool doubleOn, int sliceDir, 
 					    std::string outfilebase, std::string nameofproject,
@@ -151,7 +151,7 @@ class CCsegtool_initialization
 		ImagePointer Get3DImage();
 		
 	protected:
-		void loadinginputimage(std::string inputFileName, std::string segFile);
+		void loadinginputimage(std::string inputFileName, std::string segFileName);
 		void vesselremoval(bool segLabel);
 		void extract_Midsagittal_planes(int sliceDir, std::string MidPlaneSliceNumber);
 		void averaging(int averageNum, int sliceDir, std::string MidPlaneSliceNumber);
