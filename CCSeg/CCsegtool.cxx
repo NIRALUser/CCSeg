@@ -54,12 +54,13 @@ int main(int argc, char *argv[])
 		/* Preview */
 		if(debug)
 			std::cout<<"INITIALIZE"<<std::endl;
-		initialize(Image_filename, Mask_filename, CCAtlasDirectory, OuputFolder, nameofproject,
-			interpolationlinear, vesselRemoveOn, segLabel, averageNum, permute_x_y, reflectXOn, 
-			reflectYOn, openOn, doubleOn, sliceDir, MidPlaneSliceNumber, Number_Pts,
-			FSXForm, PSDistance, Unconstrained, WMintensity, MPSDisplacement, Number_iteration,
-			Lambdamax, Coefofoptim, debug, false, ViewImage, parameters, &lastX, &lastY, &lastScale,
-			&lastRot,scalefactor, othercompo,addangle);
+		if (!initialize(Image_filename, Mask_filename, CCAtlasDirectory, OuputFolder, nameofproject,
+				interpolationlinear, vesselRemoveOn, segLabel, averageNum, permute_x_y, reflectXOn,
+				reflectYOn, openOn, doubleOn, sliceDir, MidPlaneSliceNumber, Number_Pts,
+				FSXForm, PSDistance, Unconstrained, WMintensity, MPSDisplacement, Number_iteration,
+				Lambdamax, Coefofoptim, debug, false, ViewImage, parameters, &lastX, &lastY, &lastScale,
+				&lastRot,scalefactor, othercompo,addangle))
+		  return 0;
 		
 		/* Run */
 		if(debug)

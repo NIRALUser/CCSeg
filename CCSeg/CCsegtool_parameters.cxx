@@ -40,17 +40,17 @@ CCsegtool_parameters::CCsegtool_parameters (ExtractImageConstPointer Image,	//fi
 	//load the Image
 	SetImage(Image);
 	
-	//Each files have a number
+	//Each file has a number
 	//SSMean
-	readf4(Way,1);
+	if (!readf4(Way,1)) throw std::runtime_error("Could not read model file");
 	//Eigenvectors
-	readf4(Way,2);
+	if (!readf4(Way,2)) throw std::runtime_error("Could not read model file");
 	//Bounds
-	readf(Way,3);
+	if (!readf(Way,3)) throw std::runtime_error("Could not read model file");
 	//PMMean
-	readf(Way,4);
+	if (!readf(Way,4)) throw std::runtime_error("Could not read model file");
 	//PMSigmaInv
-	readf(Way,5);
+	if (!readf(Way,5)) throw std::runtime_error("Could not read model file");
 	
 	if(debug)
 	{
@@ -95,9 +95,9 @@ CCsegtool_parameters::CCsegtool_parameters (ExtractImageConstPointer Image,	//fi
 
 
 /********************************************************************************* 
- * Fill a vector with the CC atlas directory
+ * Fill a vector with model data from the CC atlas directory
  ********************************************************************************/
-void CCsegtool_parameters::readf(std::string way, int nbfile)
+bool CCsegtool_parameters::readf(std::string way, int nbfile)
 {
 	int i[3];
 	float j;
@@ -115,6 +115,9 @@ void CCsegtool_parameters::readf(std::string way, int nbfile)
 		case 5:
 			filename=way + "/Profile_sigmainv.asc";
 			break;
+	        default:
+			cerr << "Error (readf): Wrong file number" << endl;
+			return false;
 	}
 	
 	std::ifstream file(filename.c_str() , ios::in);  // open in reading
@@ -164,8 +167,12 @@ void CCsegtool_parameters::readf(std::string way, int nbfile)
 		}
 		
 		file.close();
+		return true;
 	}
-	else cerr << "Error: The opening of the file failed" << endl;
+	else {
+	  cerr << "Error: The opening of the file failed" << endl;
+	  return false;
+	}
 }
 
 
@@ -173,7 +180,7 @@ void CCsegtool_parameters::readf(std::string way, int nbfile)
  * Fill a vector with the data of a file where there are 4 value on a line
  * like in CC atlas directory
  ********************************************************************************/
-void CCsegtool_parameters::readf4(std::string way, int nbfile)
+bool CCsegtool_parameters::readf4(std::string way, int nbfile)
 {
 	char c;
 	int i[2];
@@ -188,6 +195,9 @@ void CCsegtool_parameters::readf4(std::string way, int nbfile)
 		case 2:
 			filename = way + "/Shape_eigvecs.asc";
 			break;
+	        default:
+	                cerr << "Error (readf4): Wrong file number" << endl;
+			return false;
 	}
 	
 	std::ifstream file(filename.c_str() , ios::in);  // open in reading
@@ -228,9 +238,13 @@ void CCsegtool_parameters::readf4(std::string way, int nbfile)
 		}
 		
 		file.close();
+		return true;
 	}
 	
-	else cerr << "Error: The opening of the file failed" << endl;
+	else {
+	  cerr << "Error: The opening of the file failed" << endl;
+	  return false;
+	}
 }
 
 
