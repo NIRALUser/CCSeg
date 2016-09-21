@@ -128,8 +128,8 @@ class CCsegtool_initialization
 		static const int NUM_COMPONENTS = 5;
 		
 		int compute_initialization(std::string inputFileName, std::string segFileName, bool vesselRemoveOn,
-					    bool segLabel, int averageNum, bool permute_x_y, bool reflectXOn, 
-					    bool reflectYOn, bool openOn, bool doubleOn, int sliceDir, 
+					    int segLabel, int averageNum, bool permute_x_y, bool reflectXOn,
+					    bool reflectYOn, bool openOn, bool doubleOn, int sliceDir,
 					    std::string outfilebase, std::string nameofproject,
 					    std::string MidPlaneSliceNumber, bool othercompo, int angle, bool debug=false);
 		void SetLambdaMax(int lambdaMax){m_LambdaMax=lambdaMax;}
@@ -152,19 +152,18 @@ class CCsegtool_initialization
 		
 	protected:
 		void loadinginputimage(std::string inputFileName, std::string segFileName);
-		void vesselremoval(bool segLabel);
+		void vesselremoval(int segLabel);
 		void extract_Midsagittal_planes(int sliceDir, std::string MidPlaneSliceNumber);
 		void averaging(int averageNum, int sliceDir, std::string MidPlaneSliceNumber);
 		void dopermute_x_y();
 		void reflectX();
 		void reflectY();
-		void extractLabel(bool segLabel);
+		void extractLabel(int segLabel);
 		void closingop();
 		void dodoubleOn();
 		void writeInput(std::string outfilebase, std::string nameofproject);
 		void writeoutput(std::string outfilebase, std::string nameofproject);
 		
-
 	private:
 		/** Use in compute_parameters **/
 		typedef   itk::Image<short,ImageEDimension>     CCLOutputImageType;

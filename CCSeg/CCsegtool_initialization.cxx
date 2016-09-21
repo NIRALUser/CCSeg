@@ -37,7 +37,7 @@ CCsegtool_initialization::CCsegtool_initialization(bool interpolationlinear, flo
  * several other operation ( opening, rotation ....)
  ***************************************************************************/
 int CCsegtool_initialization::compute_initialization(std::string inputFileName,std::string segFileName, bool vesselRemoveOn,
-		 bool segLabel, int averageNum, bool permute_x_y, bool reflectXOn, bool reflectYOn, bool openOn, 
+		 int segLabel, int averageNum, bool permute_x_y, bool reflectXOn, bool reflectYOn, bool openOn,
 		 bool doubleOn, int sliceDir, std::string outfileBase, std::string nameofproject, 
 		 std::string MidPlaneSliceNumber, bool othercompo, int angle, bool debug)
 {
@@ -235,7 +235,7 @@ void CCsegtool_initialization::loadinginputimage(std::string inputFileName, std:
 /***************************************************************************
  * Do a vesselremoval
  ***************************************************************************/
-void CCsegtool_initialization::vesselremoval(bool segLabel)
+void CCsegtool_initialization::vesselremoval(int segLabel)
 {
 	try 
 	{
@@ -253,13 +253,10 @@ void CCsegtool_initialization::vesselremoval(bool segLabel)
 	try 
 	{
 		//Vessel removal
-		int seglabel=1;
-		if(segLabel)
-			seglabel=0;
 		VesselRemover::Pointer VesselFilter = VesselRemover::New();
 		VesselFilter->SetImage(m_loadImage);
 		VesselFilter->SetEMSseg(m_castfilter->GetOutput());
-		VesselFilter->SetWMlabel(seglabel);
+		VesselFilter->SetWMlabel(segLabel);
 		VesselFilter->RemoveVessels();
 		m_preProcImage = VesselFilter->GetResultImage();
 	}
@@ -506,17 +503,14 @@ void CCsegtool_initialization::reflectY()
 /***************************************************************************
  * Extract the Label
  ***************************************************************************/
-void CCsegtool_initialization::extractLabel(bool segLabel)
+void CCsegtool_initialization::extractLabel(int segLabel)
 {
 	try 
 	{
-		int seglabel=1;
-		if(segLabel)
-			seglabel=0;
 		m_threshFilter = BinaryThresholdFilterType::New();
 		m_threshFilter->SetInput(m_mask);
-		m_threshFilter->SetUpperThreshold(seglabel);
-		m_threshFilter->SetLowerThreshold(seglabel);
+		m_threshFilter->SetUpperThreshold(segLabel);
+		m_threshFilter->SetLowerThreshold(segLabel);
 		m_threshFilter->SetOutsideValue(BG_VALUE);
 		m_threshFilter->SetInsideValue(LABEL_VALUE);
 		m_threshFilter->Update();
