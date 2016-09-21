@@ -131,13 +131,18 @@ int initialize( std::string Image_filename, std::string Seg_filename, std::strin
 	int numslice = initialization->GetImageSSize();
 	if(MidPlaneSliceNumber.compare("default")==0)
 		numslice = (numslice-1)/2;
-	
-	CCsegtool_parameters* parameters = new CCsegtool_parameters(initialization->GetOutputImage(), CCAtlasDirectory,
-					      initialization->Get3DImage(), permute_x_y, reflectXOn, reflectYOn, doubleOn,
-					      sliceDir, numslice ,initialization->GetCenterX(),initialization->GetCenterY(),
-					      initialization->GetRotation(),initialization->GetScale(), FSXForm, PSDistance,
-					      WMvalue1,10,50,initialization->Get3DImageSize(), debug);
-	
+	CCsegtool_parameters* parameters;
+	try {
+	  parameters = new CCsegtool_parameters(initialization->GetOutputImage(), CCAtlasDirectory,
+					        initialization->Get3DImage(), permute_x_y, reflectXOn, reflectYOn, doubleOn,
+					        sliceDir, numslice ,initialization->GetCenterX(),initialization->GetCenterY(),
+					        initialization->GetRotation(),initialization->GetScale(), FSXForm, PSDistance,
+					        WMvalue1,10,50,initialization->Get3DImageSize(), debug);
+	}
+	catch (std::exception &ex) {
+	  std::cerr << ex.what() << std::endl;
+	  return 0;
+	}
 	// Save the value from the initialization in parameters
 	parameters->SetGlobalvalue(initialization->GetWMvalue(), initialization->GetvoxelsizeX(),
 				    initialization->GetvoxelsizeY());

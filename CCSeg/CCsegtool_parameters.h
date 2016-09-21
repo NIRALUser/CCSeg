@@ -48,10 +48,10 @@ class CCsegtool_parameters
 				     int numSlice, int X, int Y,float Rotation, float Scale, bool FSXForm, 
 				     double PSDistance, int WMIntensity,int MPSDisplacement, int OSteps, 
 				     SizeType ImageSize, bool Debug=false);
-		//to accede to the private attributs
-		//Methods for Parameter Specifications
-		void readf(std::string way, int nbfile);
-		void readf4(std::string way, int nbfile);
+		//to access the private attributes
+		//Methods for parameter specifications
+		bool readf(std::string way, int nbfile);
+		bool readf4(std::string way, int nbfile);
 		void getsizeof(int *i, int nbfile);
 		void writeoutput(std::string path_output, std::string _nameofproject);
 		void setparam(double X, double Y, double Scale, double Rot);
